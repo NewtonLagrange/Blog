@@ -1,0 +1,39 @@
+{% extends 'Index/index.html' %}
+{% block main %}
+    <main class="col-md-8">
+    <section class="comment-area" id="comment-area">
+        <h3 class="center">书写你的博客</h3><br>
+        <form action="" method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="exampleFormControlInput1">标题</label>
+                <input type="text" class="form-control" id="exampleFormControlInput1" name="name">
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">分类</label>
+                <select class="form-control" id="exampleFormControlSelect1" name="category" required>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlSelect2">标签--多选</label>
+                <select multiple class="form-control" id="exampleFormControlSelect2" name="tag">
+                     {% for tag in tags %}
+                        <option value="{{ tag.id }}">{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">内容--支持MarkDown</label>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="20" name="content"></textarea>
+                <br>
+                <button type="submit" class="btn btn-primary">完成</button>
+            </div>
+        </form>
+        </section>
+    </main>
+
+
+{% endblock %}

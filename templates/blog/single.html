@@ -1,0 +1,77 @@
+{% extends 'Index/index.html' %}
+{% block head %}
+    <script>
+        $(function () {
+            $('#example').popover()
+        });
+    </script>
+{% endblock %}
+
+{% block main %}
+    <main class="col-md-8">
+                <article class="post post-1">
+
+                    <header class="entry-header">
+                        <h1 class="entry-title">{{ paper.name }}</h1>
+                        <div class="entry-meta">
+                            <span class="post-category"><a href="#">{{ paper.tag.name }}</a></span>
+                            <span class="post-date"><a href="#"><time
+                                                                      >{{ paper.date }}</time></a></span>
+
+                            <span class="post-author"><a href="#">{{ paper.user.name }}</a></span>
+                            <span class="comments-link"><a href="{% url 'blog:detail' paper.id %}">{{ paper.comment_set.count }} 评论</a></span>
+                            <span class="views-count"><a href="#">{{ paper.reading }} 阅读</a></span>
+                        </div>
+                    </header>
+                    {# 文章内容 #}
+                    <div class="entry-content clearfix">
+                        {{ paper.content|safe }}
+                    </div>
+
+                </article>
+                <section class="comment-area" id="comment-area">
+                    <hr>
+                    <h3>发表评论</h3>
+                    <form action="" method="post" class="comment-form">
+                        <div class="row">
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                <label for="id_comment">评论：</label>
+                                <textarea name="comment" id="id_comment" required></textarea>
+
+                                {% if username %}
+                                <button type="submit" class="comment-btn">发表</button>
+                                {% else %}
+                                <button type="submit" data-content="请先登录" data-placement="top"
+                                class="comment-btn" data-toggle="popover" href="#" id="example">发表</button>
+                                {% endif %}
+
+                            </div>
+                        </div>    <!-- row -->
+                    </form>
+                    <div class="comment-list-panel">
+                        <h3>评论列表，共 <span>{{ paper.comment_set.count }}</span> 条评论</h3>
+                        <ul class="comment-list list-unstyled">
+
+                                {% for comment in paper.comment_set.all %}
+                                    <li class="comment-item">
+                                        <span class="nickname">{{ comment.user.name }}</span>
+                                        <time class="submit-date">{{ comment.date }}</time>
+                                        <div class="text">
+                                            {{ comment.content }}
+                                        </div>
+                                    </li>
+                                {% endfor %}
+
+                        </ul>
+                    </div>
+                </section>
+            </main>
+{% endblock %}
+
+{% block toc %}
+    <div class="widget widget-content">
+                    <h3 class="widget-title">文章目录</h3>
+                    {{ paper.toc|safe }}
+                </div>
+{% endblock %}
